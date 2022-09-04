@@ -1,0 +1,67 @@
+version: "3"
+services:
+  mqtt:
+    image: eclipse-mosquitto:latest
+    container_name: mqtt
+    # user: 1883:1883
+    restart: unless-stopped
+    ports:
+      - "1883:1883" # Paquetes MQTT
+      - "9001:9001" # Protocolo HTTP/Websocket
+    volumes:
+      - /home/ubuntu/docker/mosquitto/config:/mosquitto/config
+      - /home/ubuntu/docker/mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - /home/ubuntu/docker/mosquitto/config/password_file:/mosquitto/config/password_file
+      - /home/ubuntu/docker/mosquitto/data:/mosquitto/data
+      - /home/ubuntu/docker/mosquitto/log:/mosquitto/log
+    environment:
+      - TZ=America/Bogota
+    networks:
+      - npm_proxy
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    user: 1001:1001
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    volumes:
+      # Volumenes para influxdb v1.x
+      - /home/ubuntu/docker/influxdb/var/lib/influxdb:/var/lib/influxdb
+      - /home/ubuntu/docker/influxdb/etc/influxdb:/etc/influxdb
+      # Volumenes para influxdb v2.x
+      - /home/ubuntu/docker/influxdb/var/lib/influxdb2:/var/lib/influxdb2
+      - /home/ubuntu/docker/influxdb/etc/influxdb2:/etc/influxdb2
+    networks:
+      - npm_proxy
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    user: 1001:1001
+    restart: unless-stopped
+    ports:
+      - "1880:1880"
+    volumes:
+      - /home/ubuntu/docker/nodered/data:/data
+    environment:
+      - TZ=America/Bogota
+    networks:
+      - npm_proxy
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    user: 1001:1001
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - /home/ubuntu/docker/grafana/var/lib/grafana:/var/lib/grafana
+    networks:
+      - npm_proxy
+
+networks:
+  npm_proxy:
+    external: true
