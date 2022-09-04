@@ -28,7 +28,7 @@ Volumen para versión 1.X
 ```
 mkdir -p /home/ubuntu/docker/influxdb/var/lib/influxdb && mkdir -p /home/ubuntu/docker/influxdb/etc/influxdb
 ```
-### 1.4. Grafana
+### 1.4. Mosquitto
 
 ```
 mkdir -p /home/ubuntu/docker/mosquitto/config && mkdir -p /home/ubuntu/docker/mosquitto/data && mkdir -p /home/ubuntu/docker/mosquitto/log
